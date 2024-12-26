@@ -37,7 +37,7 @@ function TodoItem({ todo, setOpenEditDialog, setEditTodoId, setEditTodoTitle, se
         <DeleteIcon color='error' />
       </IconButton>
       <IconButton edge="end" onClick={handleViewClick} color="default">
-        <VisibilityIcon  color='success'/>
+        <VisibilityIcon  color='inherit'/>
       </IconButton>
     </ListItem>
   );

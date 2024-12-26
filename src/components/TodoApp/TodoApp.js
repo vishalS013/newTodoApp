@@ -21,7 +21,6 @@ import { ArrowUpward, ArrowDownward } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,7 +57,6 @@ function TodoApp() {
   const addTodo = (newTodo) => {
     const trimmedTitle = newTodo.title.trim();
     const isDuplicate = todos.some((todo) => todo.title === trimmedTitle);
-  
     if (isDuplicate) {
       toast.error("This todo already exists!");
     } else {
@@ -66,7 +64,6 @@ function TodoApp() {
       toast.success("Todo added successfully!");
     }
   };
-  
 
   const deleteTodo = async (id) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -117,7 +114,7 @@ function TodoApp() {
       ? todo.title.toLowerCase().includes(searchQuery.toLowerCase())
       : true
   );
-
+console.log('vv', filteredTodos)
   const totalPages = Math.ceil(filteredTodos.length / itemsPerPage);
   const currentTodos = filteredTodos.slice(
     (currentPage - 1) * itemsPerPage,
@@ -152,6 +149,10 @@ function TodoApp() {
     setTodoToDelete(null);
   };
 
+  const searchFunctionality = (e)=>{
+    setSearchQuery(e.target.value)
+    setCurrentPage(1)
+  }
   return (
     <Container>
       <AppBar position="sticky">
@@ -182,7 +183,7 @@ function TodoApp() {
           label="Search Todos"
           variant="outlined"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e)=>searchFunctionality(e)}
         />
       </Box>
 
@@ -230,29 +231,29 @@ function TodoApp() {
             </Box>
 
             <List>
-              {currentTodos.length > 0
-                ? currentTodos.map((todo) => (
-                    <TodoItem
-                      key={todo.id}
-                      todo={todo}
-                      deleteTodo={deleteTodo}
-                      setOpenEditDialog={setOpenEditDialog}
-                      setEditTodoId={setEditTodoId}
-                      setEditTodoTitle={setEditTodoTitle}
-                      setViewTodo={setViewTodo}
-                      toggleComplete={toggleComplete}
-                      handleDeleteClick={handleDeleteClick}
-                    />
-                  ))
-                : !dataLoading && (
-                    <Typography
-                      variant="h5"
-                      align="center"
-                      sx={{ mt: 3, color: "ThreeDDarkShadow" }}
-                    >
-                      No todos found.
-                    </Typography>
-                  )}
+              {currentTodos.length > 0 ? (
+                currentTodos.map((todo) => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    deleteTodo={deleteTodo}
+                    setOpenEditDialog={setOpenEditDialog}
+                    setEditTodoId={setEditTodoId}
+                    setEditTodoTitle={setEditTodoTitle}
+                    setViewTodo={setViewTodo}
+                    toggleComplete={toggleComplete}
+                    handleDeleteClick={handleDeleteClick}
+                  />
+                ))
+              ) : (
+                <Typography
+                  variant="h5"
+                  align="center"
+                  sx={{ mt: 3, color: "ThreeDDarkShadow" }}
+                >
+                  No todos found.
+                </Typography>
+              )}
             </List>
 
             {/* Pagination */}
@@ -325,7 +326,7 @@ function TodoApp() {
         <DialogActions sx={{ marginBottom: "10px" }}>
           <Button
             onClick={() => setViewTodo(null)}
-            color="error"
+            color="inherit"
             variant="contained"
           >
             Close
@@ -360,7 +361,7 @@ function TodoApp() {
         <DialogActions sx={{ marginBottom: "10px" }}>
           <Button
             onClick={() => setOpenEditDialog(false)}
-            color="error"
+            color="inherit"
             variant="contained"
           >
             Cancel
@@ -384,7 +385,7 @@ function TodoApp() {
               variant="contained"
               sx={{ width: "100px" }}
             >
-              Save
+              Update
             </Button>
           )}
         </DialogActions>
@@ -425,14 +426,14 @@ function TodoApp() {
         <DialogActions sx={{ justifyContent: "center", marginBottom: "20px" }}>
           <Button
             onClick={handleCloseDeleteDialog}
-            color="primary"
+            color="inherit"
             variant="contained"
           >
             Cancel
           </Button>
           <Button
             onClick={handleConfirmDelete}
-            color="warning"
+            color="error"
             disabled={loading}
             variant="contained"
           >
@@ -444,10 +445,7 @@ function TodoApp() {
           </Button>
         </DialogActions>
       </Dialog>
-      <ToastContainer 
-        position="top-right"
-        autoClose={3000}
-      />
+      <ToastContainer position="top-right" autoClose={3000} />
     </Container>
   );
 }
